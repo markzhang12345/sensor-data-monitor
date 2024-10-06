@@ -1,35 +1,10 @@
 import React from "react";
-import { useEffect, useState } from "react";
 import { List, Typography } from "antd";
-import axios from "axios";
-import { State, HistoryProps } from "../Types/Types";
+import { HistoryProp } from "../Types/Types.ts";
 
 const { Title } = Typography; // 解构赋值，从 Typography 中提取 Title 组件
 
-const History: React.FC<HistoryProps> = ({ setNowState }) => {
-  const [taskState, setTaskState] = useState<State[]>([]);
-
-  const fetchState = () => {
-    axios
-      .get("http://localhost:5000/states/history")
-      .then((res) => {
-        setTaskState(res.data);
-        const newState = res.data[0];
-        setNowState(newState);
-      })
-      .catch((err) => {
-        console.log("getting states wrong");
-      });
-  };
-
-  useEffect(() => {
-    fetchState();
-    const interval = setInterval(fetchState, 10000);
-
-    // 组件卸载时清除定时器
-    return () => clearInterval(interval);
-  }, []);
-
+const History: React.FC<HistoryProp> = ({ taskStates }) => {
   return (
     <div style={{ padding: "20px" }}>
       {" "}
@@ -37,7 +12,7 @@ const History: React.FC<HistoryProps> = ({ setNowState }) => {
       {
         <List
           bordered
-          dataSource={taskState}
+          dataSource={taskStates}
           renderItem={(state) => {
             // 使用 renderItem 渲染每个列表项
             const date = new Date(state.time); // 将字符串格式的时间转换为 Date 对象

@@ -12,12 +12,37 @@ let statesRouter = require("./routes/states");
 
 let app = express();
 
+function clearDatabase() {
+  return mongoose.connection.db.collections().then((collections) => {
+    let dropPromises = collections.map((collection) => {
+      return collection
+        .drop()
+        .then(() => {
+          console.log(`已清空集合: ${collection.collectionName}`);
+        })
+        .catch((error) => {
+          if (error.message === "ns not found") {
+            console.log(`集合 ${collection.collectionName} 不存在，跳过`);
+          } else {
+            console.error(
+              `删除集合 ${collection.collectionName} 时出错: ${error}`
+            );
+          }
+        });
+    });
+    return Promise.all(dropPromises);
+  });
+}
+
 // 连接mongoodb
 mongoose
   .connect(
     "mongodb+srv://admin:admin@mc.zecgw.mongodb.net/?retryWrites=true&w=majority&appName=mc"
   )
-  .then(() => console.log("mongodb connect"));
+  .then(() => {
+    console.log("mongodb connect");
+    return clearDatabase();
+  });
 
 app.use(cors());
 app.use(logger("dev"));

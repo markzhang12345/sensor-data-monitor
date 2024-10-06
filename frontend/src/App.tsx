@@ -1,10 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 import Home from "./page/Home.tsx";
 import History from "./page/History.tsx";
 import { State } from "./Types/Types.ts";
+import axios from "axios";
+import { stateReducer, initialStates } from "./Reducer.ts";
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,14 +19,25 @@ const items = newNames.map((name, index) => ({
 }));
 
 const App: React.FC = () => {
-  const initialState: State = {
-    temperature: 20,
-    pressure: 1013,
-    depth: 0,
-    time: new Date().toISOString(),
+  const [taskStates, dispatch] = useReducer(stateReducer, initialStates);
+
+  const fetchState = () => {
+    axios
+      .get("http://localhost:5000/states/history")
+      .then((res) => {
+        dispatch({ type: "update", payload: res.data });
+      })
+      .catch((err) => {
+        console.log("getting states wrong");
+      });
   };
 
-  const [nowState, setNowState] = useState<State>(initialState);
+  useEffect(() => {
+    const interval = setInterval(fetchState, 10000);
+
+    // 组件卸载时清除定时器
+    return () => clearInterval(interval);
+  }, []);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -53,13 +66,10 @@ const App: React.FC = () => {
             }}
           >
             <Routes>
-              <Route
-                path="/"
-                element={<Home nowState={nowState} setNowState={setNowState} />}
-              />
+              <Route path="/" element={<Home taskStates={taskStates} />} />
               <Route
                 path="/history"
-                element={<History setNowState={setNowState} />}
+                element={<History taskStates={taskStates} />}
               />
             </Routes>
           </div>

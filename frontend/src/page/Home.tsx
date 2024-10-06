@@ -1,15 +1,16 @@
-import React from "react";
-import { HomeProps } from "../Types/Types";
+import React, { useReducer } from "react";
+import { HistoryProp } from "../Types/Types.ts";
 
-const Home: React.FC<HomeProps> = ({ nowState }) => {
-  const { temperature, pressure, depth } = nowState;
+const Home: React.FC<HistoryProp> = ({ taskStates }) => {
+  const nowState = taskStates[0];
+  console.log("Current sensor state:", nowState);
 
   return (
     <div>
       <h1>Sensor Data</h1>
-      <p>Temperature: {temperature} °C</p>
-      <p>Pressure: {pressure} kPa</p>
-      <p>Depth: {depth} m</p>
+      <p>Temperature: {nowState.temperature} °C</p>
+      <p>Pressure: {nowState.pressure} kPa</p>
+      <p>Depth: {nowState.depth} m</p>
     </div>
   );
 };

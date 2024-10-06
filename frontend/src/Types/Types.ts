@@ -5,11 +5,8 @@ export interface State {
   time: string; // 用字符串类型来存储时间
 }
 
-export interface HomeProps {
-  nowState: State;
-  setNowState: React.Dispatch<React.SetStateAction<State>>;
+export interface HistoryProp {
+  taskStates: State[];
 }
 
-export interface HistoryProps {
-  setNowState: React.Dispatch<React.SetStateAction<State>>;
-}
+export type StateAction = { type: "update"; payload: State[] };
