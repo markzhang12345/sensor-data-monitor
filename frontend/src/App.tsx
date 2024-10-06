@@ -4,14 +4,14 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 import Home from "./page/Home.tsx";
 import History from "./page/History.tsx";
-import { State } from "./Types/Types.ts";
+import Log from "./page/Log.tsx";
 import axios from "axios";
 import { stateReducer, initialStates } from "./Reducer.ts";
 
 const { Header, Content, Footer } = Layout;
 
-const newNames = ["操作界面", "历史记录"];
-const routes = ["/", "/history"];
+const newNames = ["操作界面", "历史记录", "操作日志"];
+const routes = ["/", "/history", "/log"];
 
 const items = newNames.map((name, index) => ({
   key: index + 1,
@@ -71,6 +71,7 @@ const App: React.FC = () => {
                 path="/history"
                 element={<History taskStates={taskStates} />}
               />
+              <Route path="/log" element={<Log />} />
             </Routes>
           </div>
         </Content>
