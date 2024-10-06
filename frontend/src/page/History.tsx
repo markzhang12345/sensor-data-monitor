@@ -2,28 +2,32 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { List, Typography } from "antd";
 import axios from "axios";
+import { State, HistoryProps } from "../Types/Types";
 
 const { Title } = Typography; // 解构赋值，从 Typography 中提取 Title 组件
 
-interface State {
-  temperature: number;
-  pressure: number;
-  depth: number;
-  time: string; // 用字符串类型来存储时间
-}
-
-const History: React.FC = () => {
+const History: React.FC<HistoryProps> = ({ setNowState }) => {
   const [taskState, setTaskState] = useState<State[]>([]);
 
-  useEffect(() => {
+  const fetchState = () => {
     axios
       .get("http://localhost:5000/states/history")
       .then((res) => {
         setTaskState(res.data);
+        const newState = res.data[0];
+        setNowState(newState);
       })
       .catch((err) => {
         console.log("getting states wrong");
       });
+  };
+
+  useEffect(() => {
+    fetchState();
+    const interval = setInterval(fetchState, 10000);
+
+    // 组件卸载时清除定时器
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -42,7 +46,6 @@ const History: React.FC = () => {
             return (
               <List.Item>
                 {" "}
-                {/* 列表项容器 */}
                 时间: {`${formattedDate} ${formattedTime}`},&emsp;&emsp; 温度:{" "}
                 {state.temperature}°C,&emsp; 压力: {state.pressure}kPa,&emsp;
                 深度: {state.depth}m

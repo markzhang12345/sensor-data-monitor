@@ -1,8 +1,10 @@
 import React from "react";
+import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 import Home from "./page/Home.tsx";
 import History from "./page/History.tsx";
+import { State } from "./Types/Types.ts";
 
 const { Header, Content, Footer } = Layout;
 
@@ -15,6 +17,15 @@ const items = newNames.map((name, index) => ({
 }));
 
 const App: React.FC = () => {
+  const initialState: State = {
+    temperature: 20,
+    pressure: 1013,
+    depth: 0,
+    time: new Date().toISOString(),
+  };
+
+  const [nowState, setNowState] = useState<State>(initialState);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -42,8 +53,14 @@ const App: React.FC = () => {
             }}
           >
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/history" element={<History />} />
+              <Route
+                path="/"
+                element={<Home nowState={nowState} setNowState={setNowState} />}
+              />
+              <Route
+                path="/history"
+                element={<History setNowState={setNowState} />}
+              />
             </Routes>
           </div>
         </Content>

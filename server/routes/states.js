@@ -2,18 +2,6 @@ let express = require("express");
 const State = require("../models/State");
 let router = express.Router();
 
-router.get("/states/nowstate", (req, res) => {
-  State.findOne()
-    .sort({ time: -1 })
-    .then((state) => {
-      res.status(200).json(state);
-    })
-    .catch((err) => {
-      console.error("Error fetching state", err);
-      res.status(500).send("Internal Server Error");
-    });
-});
-
 router.get("/states/history", (req, res) => {
   State.find()
     .sort({ time: -1 })
