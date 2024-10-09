@@ -29,6 +29,7 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
     };
 
     window.addEventListener("keydown", handleKeyDown);
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };

@@ -51,4 +51,15 @@ client.on("message", (topic, message) => {
   }
 });
 
-module.exports = client;
+// 向控制主题发送命令的函数
+function sendCommand(command) {
+  client.publish(topic_control, command, (err) => {
+    if (err) {
+      console.error("Failed to send control command:", err);
+    } else {
+      console.log("Control command sent successfully:", command);
+    }
+  });
+}
+
+module.exports = { client, sendCommand };
