@@ -5,7 +5,8 @@ let router = express.Router();
 router.post("/action", (req, res) => {
   const commend = req.commend;
   sendCommand(commend);
-  res.status(200).send("Advance command sent");
+  if (commend) res.status(200).send("Advance commend sent");
+  else res.status(400).send("Cannot receive commend");
 });
 
 module.exports = router;
