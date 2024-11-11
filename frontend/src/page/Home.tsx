@@ -5,63 +5,53 @@ import axios from "axios";
 
 const Home: React.FC<HistoryProp> = ({ taskStates }) => {
   const nowState = taskStates[0];
-  useEffect(() => {
-    // const handleKeyDown = (event: KeyboardEvent) => {
-    //   switch (event.key) {
-    //     case "w":
-    //     case "W":
-    //       document.getElementById("button-w")?.click();
-    //       break;
-    //     case "a":
-    //     case "A":
-    //       document.getElementById("button-a")?.click();
-    //       break;
-    //     case "s":
-    //     case "S":
-    //       document.getElementById("button-s")?.click();
-    //       break;
-    //     case "d":
-    //     case "D":
-    //       document.getElementById("button-d")?.click();
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // };
-    // window.addEventListener("keydown", handleKeyDown);
-    // return () => {
-    //   window.removeEventListener("keydown", handleKeyDown);
-    // };
+  let wDown: boolean = false;
+  let sDown: boolean = false;
+  let dDown: boolean = false;
+  let aDown: boolean = false;
 
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      let newCommend: string | undefined;
+      let moveCommend: string | undefined;
       switch (event.key) {
         case "w":
         case "W":
-          newCommend = "advance";
+          if (wDown) break;
+
+          moveCommend = "advance";
           document.getElementById("button-w")?.click();
+          wDown = true;
           break;
         case "a":
         case "A":
-          newCommend = "left";
+          if (aDown) break;
+
+          moveCommend = "left";
           document.getElementById("button-a")?.click();
+          aDown = true;
           break;
         case "s":
         case "S":
-          newCommend = "back";
+          if (sDown) break;
+
+          moveCommend = "back";
           document.getElementById("button-s")?.click();
+          sDown = true;
           break;
         case "d":
         case "D":
-          newCommend = "right";
+          if (dDown) break;
+
+          moveCommend = "right";
           document.getElementById("button-d")?.click();
+          dDown = true;
           break;
         default:
           break;
       }
-      if (newCommend)
+      if (moveCommend)
         axios
-          .post("http://localhost:5000/action", { commend: newCommend })
+          .post("http://localhost:5000/action", { commend: moveCommend })
           .then((res) => {
             console.log(res.data);
           })
@@ -69,10 +59,56 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
             console.log(err);
           });
     };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      let stopCommend: string | undefined;
+      switch (event.key) {
+        case "w":
+        case "W":
+          wDown = false;
+          stopCommend = "stop advance";
+          document.getElementById("button-w")?.click();
+          break;
+        case "a":
+        case "A":
+          aDown = false;
+          stopCommend = "stop left";
+          document.getElementById("button-a")?.click();
+          break;
+        case "s":
+        case "S":
+          sDown = false;
+          stopCommend = "stop back";
+          document.getElementById("button-s")?.click();
+          break;
+        case "d":
+        case "D":
+          dDown = false;
+          stopCommend = "stop right";
+          document.getElementById("button-d")?.click();
+          break;
+        default:
+          break;
+      }
+      if (stopCommend)
+        axios
+          .post("http://localhost:5000/action", { commend: stopCommend })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
+
   return (
     <>
       <div>
@@ -88,11 +124,7 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
         }}
       >
         <h1>Control</h1>
-        <Button
-          id="button-w"
-          type="primary"
-          style={{ marginBottom: 10, marginLeft: 56 }}
-        >
+        <Button id="button-w" type="primary" style={{ marginBottom: 10, marginLeft: 56 }}>
           W
         </Button>
         <div style={{ display: "flex" }}>
