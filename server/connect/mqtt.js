@@ -1,5 +1,6 @@
 const mqtt = require("mqtt");
 const State = require("../models/State");
+const Action = require("../models/Action");
 
 const broker = "mqtt://172.6.0.240";
 const port = 1883;
@@ -59,6 +60,18 @@ function sendCommand(command) {
     } else {
       console.log("Control command sent successfully:", command);
     }
+
+    const time = new Date();
+    const newAction = new Action({ command, time });
+
+    newAction
+      .save()
+      .then(() => {
+        console.log("Action saved successfully");
+      })
+      .catch((error) => {
+        console.error("Error saving action", error);
+      });
   });
 }
 
