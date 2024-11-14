@@ -5,20 +5,20 @@ import axios from "axios";
 
 const Home: React.FC<HistoryProp> = ({ taskStates }) => {
   const nowState = taskStates[0];
-  let wDown: boolean = false;
-  let sDown: boolean = false;
-  let dDown: boolean = false;
-  let aDown: boolean = false;
 
   useEffect(() => {
+    let wDown: boolean = false;
+    let sDown: boolean = false;
+    let dDown: boolean = false;
+    let aDown: boolean = false;
     const handleKeyDown = (event: KeyboardEvent) => {
-      let moveCommend: string | undefined;
+      let moveCommand: string | undefined;
       switch (event.key) {
         case "w":
         case "W":
           if (wDown) break;
 
-          moveCommend = "advance";
+          moveCommand = "advance";
           document.getElementById("button-w")?.click();
           wDown = true;
           break;
@@ -26,7 +26,7 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
         case "A":
           if (aDown) break;
 
-          moveCommend = "left";
+          moveCommand = "left";
           document.getElementById("button-a")?.click();
           aDown = true;
           break;
@@ -34,7 +34,7 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
         case "S":
           if (sDown) break;
 
-          moveCommend = "back";
+          moveCommand = "back";
           document.getElementById("button-s")?.click();
           sDown = true;
           break;
@@ -42,16 +42,16 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
         case "D":
           if (dDown) break;
 
-          moveCommend = "right";
+          moveCommand = "right";
           document.getElementById("button-d")?.click();
           dDown = true;
           break;
         default:
           break;
       }
-      if (moveCommend)
+      if (moveCommand)
         axios
-          .post("http://localhost:5000/action", { commend: moveCommend })
+          .post("http://localhost:5000/action", { command: moveCommand })
           .then((res) => {
             console.log(res.data);
           })
@@ -61,38 +61,38 @@ const Home: React.FC<HistoryProp> = ({ taskStates }) => {
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      let stopCommend: string | undefined;
+      let stopCommand: string | undefined;
       switch (event.key) {
         case "w":
         case "W":
           wDown = false;
-          stopCommend = "stop advance";
+          stopCommand = "stop advance";
           document.getElementById("button-w")?.click();
           break;
         case "a":
         case "A":
           aDown = false;
-          stopCommend = "stop left";
+          stopCommand = "stop left";
           document.getElementById("button-a")?.click();
           break;
         case "s":
         case "S":
           sDown = false;
-          stopCommend = "stop back";
+          stopCommand = "stop back";
           document.getElementById("button-s")?.click();
           break;
         case "d":
         case "D":
           dDown = false;
-          stopCommend = "stop right";
+          stopCommand = "stop right";
           document.getElementById("button-d")?.click();
           break;
         default:
           break;
       }
-      if (stopCommend)
+      if (stopCommand)
         axios
-          .post("http://localhost:5000/action", { commend: stopCommend })
+          .post("http://localhost:5000/action", { command: stopCommand })
           .then((res) => {
             console.log(res.data);
           })

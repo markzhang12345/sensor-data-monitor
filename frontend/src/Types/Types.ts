@@ -12,6 +12,6 @@ export interface HistoryProp {
 export type StateAction = { type: "update"; payload: State[] };
 
 export interface Action {
-  commend: string;
+  command: string;
   time: string;
 }

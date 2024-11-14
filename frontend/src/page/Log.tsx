@@ -37,7 +37,7 @@ const Log: React.FC = () => {
             return (
               <List.Item>
                 {" "}
-                时间: {`${formattedDate} ${formattedTime}`},&emsp;&emsp; 操作: {action.commend}
+                时间: {`${formattedDate} ${formattedTime}`},&emsp;&emsp; 操作: {action.command}
               </List.Item>
             );
           }}
