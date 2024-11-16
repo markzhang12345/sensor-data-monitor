@@ -1,2 +1,4 @@
 *.pdf
+*.pptx
 node_modules/
+.VSCodeCounter/

@@ -67,10 +67,7 @@ const App: React.FC = () => {
           >
             <Routes>
               <Route path="/" element={<Home taskStates={taskStates} />} />
-              <Route
-                path="/history"
-                element={<History taskStates={taskStates} />}
-              />
+              <Route path="/history" element={<History taskStates={taskStates} />} />
               <Route path="/log" element={<Log />} />
             </Routes>
           </div>
